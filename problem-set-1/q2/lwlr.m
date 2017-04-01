@@ -1,15 +1,12 @@
-function y = lwlr(X_train, y_train, tau)
+function [y, theta] = lwlr(X_train, y_train, x, tau)
 % Fits a logistic regression model to training data, then makes predictions
 % on x. Tau is convergence tolerance
 
 % Receives (x(i) ? R2) and outputs (y(i) ? {?1, 1}) (Binary classification)
 % Implements Newton-Raphson to minimize average empiral loss:
 % $J(\theta) = \frac{1/m}\sum_{i = 1}^{m}\log{(1 + \exp{-y^{(i)}\theta^Tx^{(i)})}$
-% Initialize Newton’s method with ? = ~0 (the vector of all zeros). 
-% What are the coefficients ?
-% resulting from your fit? (Remember to include the intercept term.)
 
-theta = -5*ones(2, 1);
+theta = zeros(2, 1);
 convergence_tolerance = tau*ones(2, 1);
 del_J = [1; 1];
 J = 1;
@@ -27,6 +24,12 @@ while abs(del_J) > convergence_tolerance
     theta = theta + 0.1*inv(cost_hessian(X_train, y_train, theta))*del_J;
     i = i + 1;
 end
+
+y = zeros(length(x), 1);
+for i = 1:length(x)
+    y(i) = 1./(1 + exp(-theta'*x(:, i)));
+end
+
 xlabel(cost_ax, 'Iteration'); ylabel(param_ax, 'Parameter value'); ylabel(cost_ax, 'Cost');
 title(param_ax, 'Parameter values and cost vs. iterations'); xlim(param_ax, [0, i]);
 xlim(cost_ax, [0, i]);
