@@ -1,6 +1,6 @@
-function y = lwlr(X_train, y_train, x)
+function y = lwlr(X_train, y_train, tau)
 % Fits a logistic regression model to training data, then makes predictions
-% on x. Tau is (?)
+% on x. Tau is convergence tolerance
 
 % Receives (x(i) ? R2) and outputs (y(i) ? {?1, 1}) (Binary classification)
 % Implements Newton-Raphson to minimize average empiral loss:
@@ -9,18 +9,27 @@ function y = lwlr(X_train, y_train, x)
 % What are the coefficients ?
 % resulting from your fit? (Remember to include the intercept term.)
 
-theta = zeros(2, 1);
-convergence_tolerance = 10e-20*ones(2, 1);
+theta = -5*ones(2, 1);
+convergence_tolerance = tau*ones(2, 1);
 del_J = [1; 1];
+J = 1;
 i = 0;
+param_ax = subplot(2, 1, 1);
+cost_ax = subplot(2, 1, 2);
+plot(cost_ax, [-10e5, 10e5], [convergence_tolerance(1); convergence_tolerance(1)], 'k-');
+hold(param_ax, 'on'); hold(cost_ax, 'on');
 
 while abs(del_J) > convergence_tolerance
-    plot(i, theta(1), 'r.'); hold on; plot(i, theta(2), 'b.');
+    plot(param_ax, i, theta(1), 'r.'); plot(param_ax, i, theta(2), 'b.');
+    plot(cost_ax, i, J, 'k.');
+    J = cost(X_train, y_train, theta);
     del_J = cost_gradient(X_train, y_train, theta);
     theta = theta + 0.1*inv(cost_hessian(X_train, y_train, theta))*del_J;
     i = i + 1;
 end
-
+xlabel(cost_ax, 'Iteration'); ylabel(param_ax, 'Parameter value'); ylabel(cost_ax, 'Cost');
+title(param_ax, 'Parameter values and cost vs. iterations'); xlim(param_ax, [0, i]);
+xlim(cost_ax, [0, i]);
 end
 
 function H = cost_hessian(X_train, y_train, theta)
@@ -44,4 +53,14 @@ function del_J = cost_gradient(X_train, y_train, theta)
         del_J = del_J + sample_del;
     end
     del_J = del_J./m;
+end
+
+function J = cost(X_train, y_train, theta)
+    m = size(X_train, 2); % # samples
+    J = 0;
+    for i = 1:m
+        sample_cost = log(1 + exp(-y_train(i).*theta'*X_train(:, i)));
+        J = J + sample_cost;
+    end
+   J = J./m;
 end
