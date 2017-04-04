@@ -28,3 +28,11 @@
 
 % Hubble Space Telescope Faint Object Spectograph
 %   -> Spectra of Active Galactic Nuclei and Quasars
+
+% Performs a linear 
+
+[lambdas, train_qso, test_qso] = load_quasar_data(); % x are wavelengths, qso are energy spectra
+theta = train_qso(1, :)*lambdas./(lambdas'*lambdas);
+plot(lambdas, train_qso(1, :), 'b.');
+hold on
+plot(lambdas, theta*lambdas, 'r.');

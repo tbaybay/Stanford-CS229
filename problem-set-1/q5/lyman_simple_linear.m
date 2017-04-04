@@ -29,5 +29,15 @@
 % Hubble Space Telescope Faint Object Spectograph
 %   -> Spectra of Active Galactic Nuclei and Quasars
 
-[lambdas, train_qso, test_qso] = load_quasar_data(); % x are wavelengths, qso are energy spectra
-theta = 
+% Performs a linear regression (no intercept term) of 
+% intensity onto wavelength via the normal equations:
+% X? = Y : J = (X? - Y)^2
+% => ? = inv(XtX)*Xt*Y, from grad J = 0
+% (or by recognising that X? - Y is orthogonal to C(A)).
+
+% lambdas are wavelengths, qso are observed quasar spectra
+[lambdas, train_qso, test_qso] = load_quasar_data();
+theta = train_qso(1, :)*lambdas./(lambdas'*lambdas);
+plot(lambdas, train_qso(1, :), 'b.');
+hold on
+plot(lambdas, theta*lambdas, 'r.');

@@ -9,9 +9,10 @@
 %      observed quasar spectra for training.
 % test_qso - A size m-by-n matrix, where m = 200 and n = 450, of noisy observed
 %       quasar spectra for testing.
-
-load quasar_train.csv;
-lambdas = quasar_train(1, :)';
-train_qso = quasar_train(2:end, :);
-load quasar_test.csv;
-test_qso = quasar_test(2:end, :);
+function [lambdas, train_qso, test_qso] = load_quasar_data()
+    load quasar_train.csv;
+    lambdas = quasar_train(1, :)';
+    train_qso = quasar_train(2:end, :);
+    load quasar_test.csv;
+    test_qso = quasar_test(2:end, :);
+end
