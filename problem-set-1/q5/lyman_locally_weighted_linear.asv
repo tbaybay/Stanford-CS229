@@ -2,9 +2,8 @@
 % adjacent points, meaning that the 'local' fit was heavily influenced
 % by points that were further away. This resulted in all thetas being
 % similar, producing a more-or less constant-gradient result.
-% This was in contrast to a small tau value, which meant that nearby points
-% were weighted heavily and those further away ignored - this resulted
-% in the theta reflecting the gradient in the direct neighborhood more closely.
+% This was in contrast to a small tau value, which weighted nearby points
+% 
 
 % J = sum(w(i) * (y(i) - theta*x(i))^2 
 % w(i) = exp(-(x - x(i)).^2 ./ 2*tau.^2)
