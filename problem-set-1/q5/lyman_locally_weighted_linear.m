@@ -9,20 +9,26 @@
 % J = sum(w(i) * (y(i) - theta*x(i))^2 
 % w(i) = exp(-(x - x(i)).^2 ./ 2*tau.^2)
 
-[lambdas, train_qso, test_qso] = load_quasar_data();
-
-query_x = (min(lambdas):max(lambdas))';
-tau = 5;
-qso_estimate = zeros(length(query_x), 1);
-
-for i = 1:length(query_x)
-    w = exp(-(query_x(i) - lambdas).^2/(2.*(tau.^2)));
-    W = diag(w, 0);
-    theta = (lambdas'*W*train_qso(1, :)')./(lambdas'*W*lambdas);
-    qso_estimate(i) = theta*query_x(i);
-end
-
-plot(lambdas, train_qso(1, :), 'b-');
-hold on
-plot(query_x, qso_estimate, 'r-', 'LineWidth', 3);
+function [query_x, qso_estimate] = lyman_locally_weighted_linear(sample_number, tau, train)
+    [lambdas, train_qso, test_qso] = load_quasar_data();
+    if train == 1
+        qso = train_qso;
+    elseif train == 0
+        qso = test_qso;
+    else
+        error('Selected set must be 1 (train) or 0 (test).');
+    end
     
+    query_x = (min(lambdas):max(lambdas))';
+    qso_estimate = zeros(length(query_x), 1);
+    y = qso(sample_number, :);
+
+    for i = 1:length(query_x)
+        w = exp(-(query_x(i) - lambdas).^2/(2.*(tau.^2)));
+        W = diag(w, 0);
+        theta = (lambdas'*W*y')./(lambdas'*W*lambdas);
+        qso_estimate(i) = theta*query_x(i);
+    end
+    
+    return
+end
