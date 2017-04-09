@@ -1,0 +1,95 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+\documentclass[11pt]{article} % use larger type; default would be 10pt
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+% \geometry{margin=2in} % for example, change the margins to 2 inches all round
+% \geometry{landscape} % set up the page for landscape
+%   read geometry.pdf for detailed page layout information
+
+\usepackage{graphicx} % support the \includegraphics command and options
+
+%%% PACKAGES
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\title{Problem Set 1}
+\date{08/04/2017} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed 
+
+\begin{document}
+\maketitle
+
+\section{Problem 1}
+
+\subsection{}
+We can form a cost function for logistic regression as 
+\[
+	J(\theta) = \frac{1}{m}\sum_{i = 1}^{m} \log{\big(1 + \exp{(-y^{(i)}\theta^Tx^{(i)}})}\big)
+\]
+where $y^{(i)} \in \{0, 1\}$ is the response, $x^{(i)}$ is the vector of the $i$th sample's feature values, and $\theta$ is the vector of feature coefficients. $m$ is the number of samples in the dataset. This question asked us to find the Hessian of $J$ w.r.t $\theta$, and show that it is positive semi-definite ($z^THz \geq 0 \ \forall \ z \in \mathbb{R}^n$).
+\par
+By differentiating $J$ w.r.t. each feature in $x$, I found that
+\begin{equation}
+\begin{split}
+	\nabla_{\theta}J &= -\frac{1}{m}\sum_{i = 1}^{m}\frac{y^{(i)}x^{(i)}}{1 + \exp{(y^{(i)}\theta^Tx^{(i)})}} \\
+	H &=\frac{1}{m}\sum_{i = 1}^{m}\frac{y^{(i) 2} x^{(i)} x^{(i) T}}{(1 + \exp{(y^{(i)}\theta^Tx^{(i)})})^2}
+\end{split}
+\end{equation}
+From this we can see that the Hessian is indeed symmetric, and that all its elements are positive. By expanding the Hessian into the condition for positive semi-definiteness
+\[
+	z^THz \ = \  \frac{1}{m}\sum_{i = 1}^{m}\frac{y^{(i) 2}} {(1 + \exp{(y^{(i)}\theta^Tx^{(i)})})^2}  \
+					z^T x^{(i)}x^{(i) T} z
+\]
+The fraction here will always be positive, as is the square on the right - $(x^T z)^2$. This means that we have have a sum of zero (for $z = \vec{0}$) or positive terms, thereby meaning that $H$ is PSD.
+
+\subsection{}
+After deriving the gradient and Hessian in part 1, we were then asked to apply what was found to fit logistic regression to some synthetic data. To make the fit, we minimized the cost function using Newton-Raphson. This optimization took the form
+\[
+	\theta_{j+1} := \theta_j + H^{-1} \nabla J
+\] 
+The coefficients I found from the fit were $\theta = (2.9, -0.18)$.
+
+\section{Problem 2}
+
+\subsection{}
+We were asked to show that that the Poisson distribution,
+\[
+	p(y; \lambda) = \frac{e^{-\lambda}\lambda^y}{y!}
+\]
+is a member of the Exponential Family. These are functions that have the form
+\[
+	p(y; \eta) = b(y)\exp{(\eta^T  T(y) - a(\eta))}
+\]
+It's clear from inspection that
+\begin{equation}
+\begin{split}
+	p(y; \lambda) &= \frac{1}{y!} \exp{(y\log\lambda - \lambda)} \\
+	: \quad b(y) &= \frac{1}{y!} \quad ; \quad \eta = \log\lambda \\
+	a(\eta) &= e^\eta \quad ; \quad T(y) = y
+\end{split}
+\end{equation}
+
+\subsection{}
+The canonical response function for a generalized linear model is defined as the mean of $T(y)$ parameterized by $\eta$. For the Poisson distribution, this means the c.r.f. is the expectation of the response parameterized by $\eta$. \par
+ The expectation of the Poisson distribution is $\lambda$, which we can see from the part 1 is equal to $e^{\eta}$. It follows that if we assume that $\eta = \theta^Tx$ - the linear assumption - then the canonical response function $E[y ; \eta]$ is
+ \[
+ 	 g(\eta)  = E[y; \eta] = E[y; \theta^T x] = e^{\theta^T x}
+ \]
+ 
+ \subsection{}
+ Deriving the stochastic gradient ascent rule is now straightforward, since the product of the log-likelihood of all examples will be
+ \[
+ 	 \log l(\theta) = \log \prod_{i = 1}^m p(y^{(i)}|x^{(i)}; \theta) = \sum_{i = 1}^{m}\log p(y^{(i)}|x^{(i)}; \theta)
+\]
+\end{document}

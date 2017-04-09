@@ -1,6 +1,0 @@
-function knn(distances, i, K)
-    % Returns the 
-    for k = 1:K
-        
-    end
-end
