@@ -88,8 +88,16 @@ The canonical response function for a generalized linear model is defined as the
  \]
  
  \subsection{}
- Deriving the stochastic gradient ascent rule is now straightforward, since the product of the log-likelihood of all examples will be
- \[
- 	 \log l(\theta) = \log \prod_{i = 1}^m p(y^{(i)}|x^{(i)}; \theta) = \sum_{i = 1}^{m}\log p(y^{(i)}|x^{(i)}; \theta)
+ Deriving the stochastic gradient ascent rule is now straightforward, since the log-likelihood of a single example will be
+ \begin{equation}
+ \begin{split}
+ 	 \log l(\theta)^{(i)} \ =& \ \log p(y^{(i)}|x^{(i)}; \theta) \\
+ 	 =&  \ \log\frac{1}{y^{(i)}!} + \theta^T x^{(i)} - \exp{(\theta^T x^{(i)})} \\
+ 	 : \nabla_{\theta}\log l(\theta)^{(i)} \ =& \ y^{(i)}x^{(i)} - x^{(i)}\exp(\theta^Tx^{(i)})
+\end{split}
+\end{equation}
+Hence the stochastic gradient ascent rule, which will maximize the log-likelihood across all parameters incrementally, will be
+\[
+	\{ \quad \theta := \theta + \alpha \cdot \nabla_{\theta}\log l(\theta) \quad \} \quad \text{for each } i \in \{1, ..., m\}
 \]
 \end{document}
