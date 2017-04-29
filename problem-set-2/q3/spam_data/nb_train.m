@@ -22,20 +22,7 @@ numTokens = size(trainMatrix, 2);
 % Note that for the SVM, you would want to convert these to +1 and -1.
 
 
-% What is the input?
-% A document-word matrix:
-%   - ith row represents that ith document
-%   - jth column counts the times the jth token appeared
-%   > trainMatrix
-
-% What is the response?
-%   - Whether the email is spam (class = 1) or non-spam (class = 0)
-%   trainCategory
-
-% numTokens -> Length of vocabulary
-% numTrainDocs -> Number of emails
-% tokenlist -> Tokens in vocabulary
-% spmatrix ->
+%% SOLUTION %%
 
 % What are the parameters we're fitting?
 % Two parameters for each token:
@@ -52,17 +39,20 @@ numTokens = size(trainMatrix, 2);
 
 % Right, so we ned to first calculate phi_y
 %       -> Marginal probability that an email is spam
+trainCategory = full(trainCategory);
 phi_y = sum(trainCategory)/length(trainCategory);
 
 % Now we get the sampling distribution for each token: we'll start with the
 % spam.
 % We're calculating the probability of a word, conditional on whether it's
 % spam or not.
-phi_spam = zeros(numTokens);
-phi_nonspam = zeros(numTokens);
+phi_spam = zeros(numTokens, 1);
+phi_nonspam = zeros(numTokens, 1);
 for i = 1:numTokens
-    phi_spam(i) = sum((trainMatrix(:, i) > 0).*(trainCategory(:) == 1))./sum(trainCategory(:) == 1);
-    phi_nonspam(i) = sum((trainMatrix(:, i) > 0).*(trainCategory(:) == 0))./sum(trainCategory(:) == 0);
+    phi_spam(i) = (sum((trainMatrix(:, i) > 0).*(trainCategory(:) == 1)) + 1)./(sum(trainCategory == 1) + 2);
+    phi_nonspam(i) = (sum((trainMatrix(:, i) > 0).*(trainCategory(:) == 0)) + 1)./(sum(trainCategory == 0) + 2);
 end
 
-phi_nonspam = 0;
+% Note that the + 1 and +2s implement Laplace smoothing - in the absence of
+% any previous instances of a token, we want the classifier to assign equal
+% weights to spam/non-spam.
