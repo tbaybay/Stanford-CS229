@@ -1,0 +1,30 @@
+DOC_WORD_MATRIX_TEST
+800 1448
+abil absolut ... yourself zip
+0 78 3 2 1 2 1 11 1 9 2 244 1 22 1 1 1 3 1 37 2 29 1 6 1 76 1 32 1 19 1 27 2 2 2 90 1 2 1 27 2 7 1 72 1 31 2 18 1 13 1 30 1 146 2 8 1 17 1 31 1 21 1 62 1 38 2 81 1 45 1 76 2 20 1 1 2 -1
+0 41 1 14 1 12 1 11 3 53 5 57 1 50 1 19 1 115 1 10 1 23 1 4 4 21 1 8 1 1 3 1 1 10 1 31 1 22 1 14 3 5 1 86 1 23 1 27 1 17 1 70 1 32 1 36 1 47 1 13 1 5 2 12 1 12 2 12 2 23 1 13 1 80 1 6 3 1 1 6 1 11 1 22 1 37 3 85 1 10 1 61 2 19 1 31 1 10 1 22 1 85 2 1 1 1 2 4 2 -1
+etc.
+ 
+The first line of the file is the header.
+
+The second line of the file is the number of rows (data points) and number of
+columns (vocabulary words). There are 800 rows of numbers in the MATRIX.TEST
+data, for example.
+ 
+Each line after that is a list of numbers. The first number in the line is a 0
+or a 1, where a 1 is a positive example and 0 is negative. After that,
+each pair of numbers corresponds to an (offest, count) pair. The offset
+works as follows: start with index = 1. Given a value for offset,
+update
+
+index = index + offset.
+
+Then the 'index' is the location in the vocabulary of the given word, and
+count is the number of times the word appears in the document. The last number
+on each line is a -1 to indicate the end of the line.
+
+So in the document above, the first line corresponds to a negative training
+example, where the vocabulary (dictionary) word in position 79 (= 1 + 78)
+appears 3 times, the vocabulary word in position 81 (= 2 + 79) appears 1 time,
+the word in position 83 (= 81 + 2) appears 1 time, the word in position 94 (=
+83 + 11) appears 1 time, and so on.

@@ -1,0 +1,66 @@
+
+[spmatrix, tokenlist, trainCategory] = readMatrix('MATRIX.TRAIN');
+
+trainMatrix = full(spmatrix);
+numTrainDocs = size(trainMatrix, 1);
+numTokens = size(trainMatrix, 2);
+
+% trainMatrix is now a (numTrainDocs x numTokens) matrix.
+% Each row represents a unique document (email).
+% The j-th column of the row $i$ represents the number of times the j-th
+% token appeared in email $i$. 
+
+% tokenlist is a long string containing the list of all tokens (words).
+% These tokens are easily known by position in the file TOKENS_LIST
+
+% trainCategory is a (1 x numTrainDocs) vector containing the true 
+% classifications for the documents just read in. The i-th entry gives the 
+% correct class for the i-th email (which corresponds to the i-th row in 
+% the document word matrix).
+
+% Spam documents are indicated as class 1, and non-spam as class 0.
+% Note that for the SVM, you would want to convert these to +1 and -1.
+
+
+% What is the input?
+% A document-word matrix:
+%   - ith row represents that ith document
+%   - jth column counts the times the jth token appeared
+%   > trainMatrix
+
+% What is the response?
+%   - Whether the email is spam (class = 1) or non-spam (class = 0)
+%   trainCategory
+
+% numTokens -> Length of vocabulary
+% numTrainDocs -> Number of emails
+% tokenlist -> Tokens in vocabulary
+% spmatrix ->
+
+% What are the parameters we're fitting?
+% Two parameters for each token:
+%   > The probability of that token given y =1
+%   > The probability of that token given y = 0
+% And phi_y, the base rate : p(y = 1)
+
+% How do we fit them?
+% By calculating the fraction of occurences 
+
+% How do we use these parameters to make a prediction?
+% We use Bayes' theorem to calculate the probability of each class, given
+% the query feature vector, then select which class is more probable.
+
+% Right, so we ned to first calculate phi_y
+%       -> Marginal probability that an email is spam
+phi_y = sum(trainCategory)/length(trainCategory);
+
+% Now we get the sampling distribution for each token: we'll start with the
+% spam.
+% We're calculating the probability of a word, conditional on whether it's
+% spam or not.
+phi_spam = zeros(numTokens);
+for i = 1:numTokens
+    phi_spam(i) = train 
+end
+
+phi_nonspam = 0;
