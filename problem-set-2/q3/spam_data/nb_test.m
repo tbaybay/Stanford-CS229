@@ -18,11 +18,18 @@ numTokens = size(testMatrix, 2);
 % of this vector is the predicted class (1/0) for the i-th  email (i-th row 
 % in testMatrix) in the test set.
 output = zeros(numTestDocs, 1);
+p_spam = zeros(numTestDocs, 1);
+for j = 1:numTestDocs
+    % Get the tokens that appear
+    tk_in_msg = find(testMatrix(j, :) > 0);
+    tk_nin_msg = find(testMatrix(j, :) == 0);
+    px_g_spam = prod(phi_spam(tk_in_msg)).*prod(1 - phi_spam(tk_nin_msg)).*phi_y;
+    px_g_nonspam = prod(phi_nonspam(tk_in_msg)).*prod((1 - phi_spam(tk_in_msg))).*(1 - phi_y);
+    p_spam(j) = px_g_spam./(px_g_spam + px_g_nonspam);
+    output(j) = (p_spam(j) > 0.5);
+end
 
 %---------------
-% YOUR CODE HERE
-
-
 %---------------
 
 
