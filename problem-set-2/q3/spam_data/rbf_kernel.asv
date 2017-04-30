@@ -1,0 +1,12 @@
+function K = rbf_kernel(X, tau)
+    % Accepts one matrix whose rows are example feature vectors.
+    % Returns a matrix of unnormalized probabilities.
+    % Element i,j of this matrix is the probability that xi was
+    % drawn from an n-dimensional Gaussian distribution centered at xj with
+    % variance tau^2.
+    n_examples = size(X, 1);
+    for i = 1:n_examples
+        xi = X(i, :);
+        K(i, :) = sum(repmat(xi, n_examples, 1) - X, 2).^
+    end
+end

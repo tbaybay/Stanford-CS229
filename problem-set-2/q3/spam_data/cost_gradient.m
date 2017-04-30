@@ -1,0 +1,1 @@
+function cost_gradient(average_alpha, K, Ki, yi, lambda)

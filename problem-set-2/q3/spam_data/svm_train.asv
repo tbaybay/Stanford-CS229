@@ -44,11 +44,9 @@ lambda = 1./(64.*numTrainDocs);
 % descent we use rate 1./sqrt(t)
 K = rbf_kernel(Xtrain, tau);
 
-for t = 1:40*numTrainDocs
+for i = 1:40*numTrainDocs
    ix = randi([1, numTrainDocs], 1, 1);
-   learning_rate = 1./sqrt(t);
-   Ki = K(ix, :); % Vector of example ix's similarities to other examples
-   yi = ytrain(ix);
-   average_alpha = average_alpha - learning_rate.*cost_gradient(average_alpha, K, Ki, yi, lambda);
+   learning_rate = 1./sqrt(i);
+   
 end
 
